@@ -20,28 +20,26 @@ class Iodine(object):
             return False
 
     def _iterate(self):
-        probability = float(self.decay_constant * self.timestep)
         a = self.nuclei
         b = self.array
         c = (1/2) * a
         i = a
-        step = 0
+        half_life = 0
         while i > c:
             with np.nditer(b, op_flags = ['readwrite']) as it:
                 for x in it:
-                    if random.random() <= probability:
+                    if self._decay():
                         if x[...] == 1:
                             x[...] = x[...] + -1
                             i += -1
-                        if x[...] == 0:
+                        else:
                             x[...] = x[...]
-                    if random.random() > probability:
-                        x[...] = x[...]
-            step += 1
-        return (b, step)
+            half_life += 0.01
+        self.half_life = round(half_life, ndigits = 2)
+        return b
 
-    def iterate(self):   
-        decayed_array = self._iterate()[0]
+    def iterate(self):
+        decayed_array = self._iterate()
         str_nucleide = ""
         i = 0
         while i < self.length:
@@ -53,6 +51,3 @@ class Iodine(object):
             str_nucleide += str_row + "\n"
             i += 1
         return str_nucleide
-
-    def half_life(self):
-        return self._iterate()[1] * 0.01
