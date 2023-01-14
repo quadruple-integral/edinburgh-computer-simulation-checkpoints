@@ -15,5 +15,8 @@ def main():
     print(iodine.iterate())
     print("Simulated half life: " + str(iodine.half_life) + " mins\n")
     print("Actual half life: 24.98 mins\n")
+    print("The uncertainty of a result is the percentage difference between simulated and actual value divided by the actual value.\n")
+    uncertainty = round((abs(iodine.half_life - 24.98) / 24.98) * 100, ndigits = 2)
+    print("Percentage uncertainty: " + str(uncertainty) + " %\n")
 
 main()
